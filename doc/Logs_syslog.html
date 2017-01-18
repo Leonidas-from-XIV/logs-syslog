@@ -3,6 +3,7 @@
 <head>
 <link rel="stylesheet" href="style.css" type="text/css">
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="Start" href="index.html">
 <link rel="next" href="Logs_syslog_unix.html">
 <link rel="Up" href="index.html">
@@ -55,7 +56,7 @@ Logs reporter using syslog
 
     When using a stream transport, TCP or TLS, the creation of a reporter
     attempts to establish a connection to the log host, and only results in <code class="code"><span class="constructor">Ok</span></code>
-    <code class="code"><span class="constructor">Logs</span>.reporter</code> on success, otherwise the <code class="code"><span class="constructor">Error</span> msg</code> is returned.  At
+    <code class="code"><span class="constructor">Logs</span>.reporter</code> on success, otherwise the <code class="code"><span class="constructor">Error</span>&nbsp;msg</code> is returned.  At
     runtime when the connection failed, the message is printed on standard
     error, and a re-establishment of the connection is attempted.
 <p>
@@ -92,12 +93,12 @@ Logs reporter using syslog
     an alternative transport of syslog messages over TCP.
 <p>
 
-    <em>0.0.2 - <a href="https://github.com/hannesm/logs-syslog ">homepage</a></em><br>
+    <em>0.1.0 - <a href="https://github.com/hannesm/logs-syslog ">homepage</a></em><br>
 </div>
 <hr width="100%">
 
 <pre><span id="VALmessage"><span class="keyword">val</span> message</span> : <code class="type">?facility:Syslog_message.facility -><br>       host:string -><br>       source:string -><br>       tags:Logs.Tag.set -><br>       ?header:string -> Logs.level -> Ptime.t -> string -> Syslog_message.t</code></pre><div class="info ">
-<code class="code">message ~facility ~host ~source ~tags ~header level now msg</code> is <code class="code">message</code>,
+<code class="code">message&nbsp;~facility&nbsp;~host&nbsp;~source&nbsp;~tags&nbsp;~header&nbsp;level&nbsp;now&nbsp;msg</code> is <code class="code">message</code>,
     a syslog message with the given values.  The default <code class="code">facility</code> is
     <code class="code"><span class="constructor">Syslog_message</span>.<span class="constructor">System_Daemons</span></code>.<br>
 </div>
@@ -110,7 +111,7 @@ Different framing methods used in the wild, as described in
 
 
 <pre><span id="VALframe_message"><span class="keyword">val</span> frame_message</span> : <code class="type">string -> <a href="Logs_syslog.html#TYPEframing">framing</a> -> string</code></pre><div class="info ">
-<code class="code">frame_msg msg framing</code> is <code class="code">framed_message</code>, where the <code class="code">framing</code> is
+<code class="code">frame_msg&nbsp;msg&nbsp;framing</code> is <code class="code">framed_message</code>, where the <code class="code">framing</code> is
     applied.<br>
 </div>
 
@@ -119,6 +120,6 @@ Different framing methods used in the wild, as described in
 </div>
 
 <pre><span id="VALflush"><span class="keyword">val</span> flush</span> : <code class="type">unit -> string</code></pre><div class="info ">
-<code class="code">flush ()</code> flushes the formatter, and return the <code class="code">text</code><br>
+<code class="code">flush&nbsp;()</code> flushes the formatter, and return the <code class="code">text</code><br>
 </div>
 </body></html>

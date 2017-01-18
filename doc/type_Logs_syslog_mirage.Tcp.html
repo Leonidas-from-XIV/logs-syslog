@@ -1,6 +1,7 @@
 <html><head>
 <link rel="stylesheet" href="style.css" type="text/css">
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="Start" href="index.html">
 <link title="Index of types" rel=Appendix href="index_types.html">
 <link title="Index of values" rel=Appendix href="index_values.html">
@@ -13,14 +14,17 @@
 <link title="Logs_syslog_mirage_tls" rel="Chapter" href="Logs_syslog_mirage_tls.html"><title>Logs_syslog_mirage.Tcp</title>
 </head>
 <body>
-<code class="code"><span class="keyword">functor</span>&nbsp;(<span class="constructor">C</span>&nbsp;:&nbsp;<span class="constructor">V1_LWT</span>.<span class="constructor">CONSOLE</span>)&nbsp;(<span class="constructor">CLOCK</span>&nbsp;:&nbsp;<span class="constructor">V1</span>.<span class="constructor">CLOCK</span>)&nbsp;(<span class="constructor">TCPV4</span>&nbsp;:&nbsp;<span class="constructor">V1_LWT</span>.<span class="constructor">TCPV4</span>)&nbsp;<span class="keywordsign">-&gt;</span>
-&nbsp;&nbsp;<span class="keyword">sig</span>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;create&nbsp;:
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">C</span>.t&nbsp;<span class="keywordsign">-&gt;</span>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">TCPV4</span>.t&nbsp;<span class="keywordsign">-&gt;</span>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hostname:string&nbsp;<span class="keywordsign">-&gt;</span>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">TCPV4</span>.ipaddr&nbsp;<span class="keywordsign">-&gt;</span>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;?port:int&nbsp;<span class="keywordsign">-&gt;</span>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;?framing:<span class="constructor">Logs_syslog</span>.framing&nbsp;<span class="keywordsign">-&gt;</span>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unit&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;(<span class="constructor">Logs</span>.reporter,&nbsp;string)&nbsp;<span class="constructor">Result</span>.result&nbsp;<span class="constructor">TCPV4</span>.io
+<code class="code"><span class="keyword">functor</span><br>
+&nbsp;&nbsp;(<span class="constructor">C</span>&nbsp;:&nbsp;<span class="constructor">Mirage_console_lwt</span>.<span class="constructor">S</span>)&nbsp;(<span class="constructor">CLOCK</span>&nbsp;:&nbsp;<span class="constructor">Mirage_clock</span>.<span class="constructor">PCLOCK</span>)&nbsp;(<span class="constructor">STACK</span>&nbsp;:&nbsp;<span class="constructor">Mirage_stack_lwt</span>.<span class="constructor">V4</span>)&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;<span class="keyword">sig</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;create&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">C</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">CLOCK</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">STACK</span>.t&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hostname:string&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">STACK</span>.ipv4addr&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;?port:int&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;?truncate:int&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;?framing:<span class="constructor">Logs_syslog</span>.framing&nbsp;<span class="keywordsign">-&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unit&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;(<span class="constructor">Logs</span>.reporter,&nbsp;string)&nbsp;<span class="constructor">Pervasives</span>.result&nbsp;<span class="constructor">STACK</span>.io<br>
 &nbsp;&nbsp;<span class="keyword">end</span></code></body></html>

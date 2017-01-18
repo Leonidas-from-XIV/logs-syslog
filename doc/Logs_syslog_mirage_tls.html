@@ -3,6 +3,7 @@
 <head>
 <link rel="stylesheet" href="style.css" type="text/css">
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="Start" href="index.html">
 <link rel="previous" href="Logs_syslog_mirage.html">
 <link rel="Up" href="index.html">
@@ -31,7 +32,7 @@ Logs reporter via syslog using MirageOS and TLS
 </div>
 <hr width="100%">
 
-<pre><span class="keyword">module</span> <a href="Logs_syslog_mirage_tls.Tls.html">Tls</a>: <div class="sig_block"><code class="code"><span class="keyword">functor</span> (</code><code class="code"><span class="constructor">C</span></code><code class="code"> : </code><code class="type">V1_LWT.CONSOLE</code><code class="code">) <span class="keywordsign">-&gt;</span> </code><div class="sig_block"><code class="code"><span class="keyword">functor</span> (</code><code class="code"><span class="constructor">CLOCK</span></code><code class="code"> : </code><code class="type">V1.CLOCK</code><code class="code">) <span class="keywordsign">-&gt;</span> </code><div class="sig_block"><code class="code"><span class="keyword">functor</span> (</code><code class="code"><span class="constructor">TCP</span></code><code class="code"> : </code><code class="type">V1_LWT.TCPV4</code><code class="code">) <span class="keywordsign">-&gt;</span> </code><div class="sig_block"><code class="code"><span class="keyword">functor</span> (</code><code class="code"><span class="constructor">KV</span></code><code class="code"> : </code><code class="type">V1_LWT.KV_RO</code><code class="code">) <span class="keywordsign">-&gt;</span> </code><code class="code"><span class="keyword">sig</span></code> <a href="Logs_syslog_mirage_tls.Tls.html">..</a> <code class="code"><span class="keyword">end</span></code></div></div></div></div></pre><div class="info">
+<pre><span class="keyword">module</span> <a href="Logs_syslog_mirage_tls.Tls.html">Tls</a>: <div class="sig_block"><code class="code"><span class="keyword">functor</span>&nbsp;(</code><code class="code"><span class="constructor">C</span></code><code class="code">&nbsp;:&nbsp;</code><code class="type">Mirage_console_lwt.S</code><code class="code">)&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;</code><div class="sig_block"><code class="code"><span class="keyword">functor</span>&nbsp;(</code><code class="code"><span class="constructor">CLOCK</span></code><code class="code">&nbsp;:&nbsp;</code><code class="type">Mirage_clock.PCLOCK</code><code class="code">)&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;</code><div class="sig_block"><code class="code"><span class="keyword">functor</span>&nbsp;(</code><code class="code"><span class="constructor">STACK</span></code><code class="code">&nbsp;:&nbsp;</code><code class="type">Mirage_stack_lwt.V4</code><code class="code">)&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;</code><div class="sig_block"><code class="code"><span class="keyword">functor</span>&nbsp;(</code><code class="code"><span class="constructor">KV</span></code><code class="code">&nbsp;:&nbsp;</code><code class="type">Mirage_kv_lwt.RO</code><code class="code">)&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;</code><code class="code"><span class="keyword">sig</span></code> <a href="Logs_syslog_mirage_tls.Tls.html">..</a> <code class="code"><span class="keyword">end</span></code></div></div></div></div></pre><div class="info">
 TLS reporter
 </div>
 <br>
@@ -40,17 +41,18 @@ TLS reporter
 
     To install a Mirage syslog reporter, sending via TLS to localhost, use the
     following snippet:
-<pre class="codepre"><code class="code"><span class="keyword">module</span>&nbsp;<span class="constructor">Main</span>&nbsp;(<span class="constructor">C</span>&nbsp;:&nbsp;<span class="constructor">V1_LWT</span>.<span class="constructor">CONSOLE</span>)&nbsp;(<span class="constructor">S</span>&nbsp;:&nbsp;<span class="constructor">V1_LWT</span>.<span class="constructor">STACKV4</span>)&nbsp;(<span class="constructor">CLOCK</span>&nbsp;:&nbsp;<span class="constructor">V1</span>.<span class="constructor">CLOCK</span>)&nbsp;(<span class="constructor">KEYS</span>&nbsp;:&nbsp;<span class="constructor">V1_LWT</span>.<span class="constructor">KV_RO</span>)
-&nbsp;&nbsp;<span class="keyword">module</span>&nbsp;<span class="constructor">TLS</span>&nbsp;&nbsp;=&nbsp;<span class="constructor">Tls_mirage</span>.<span class="constructor">Make</span>(<span class="constructor">S</span>.<span class="constructor">TCPV4</span>)
-&nbsp;&nbsp;<span class="keyword">module</span>&nbsp;<span class="constructor">X509</span>&nbsp;=&nbsp;<span class="constructor">Tls_mirage</span>.<span class="constructor">X509</span>(<span class="constructor">KEYS</span>)(<span class="constructor">CLOCK</span>)
+<pre class="codepre"><code class="code"><span class="keyword">open</span> <span class="constructor">Mirage_types_lwt</span>
+<span class="keyword">module</span> <span class="constructor">Main</span> (<span class="constructor">C</span> : <span class="constructor">CONSOLE</span>) (<span class="constructor">S</span> : <span class="constructor">STACKV4</span>) (<span class="constructor">CLOCK</span> : <span class="constructor">PCLOCK</span>) (<span class="constructor">KEYS</span> : <span class="constructor">KV_RO</span>)
+  <span class="keyword">module</span> <span class="constructor">TLS</span>  = <span class="constructor">Tls_mirage</span>.<span class="constructor">Make</span>(<span class="constructor">S</span>.<span class="constructor">TCPV4</span>)
+  <span class="keyword">module</span> <span class="constructor">X509</span> = <span class="constructor">Tls_mirage</span>.<span class="constructor">X509</span>(<span class="constructor">KEYS</span>)(<span class="constructor">CLOCK</span>)
 
-&nbsp;&nbsp;<span class="keyword">module</span>&nbsp;<span class="constructor">LT</span>&nbsp;=&nbsp;<span class="constructor">Logs_syslog_mirage_tls</span>.<span class="constructor">Tls</span>(<span class="constructor">C</span>)(<span class="constructor">CLOCK</span>)(<span class="constructor">S</span>.<span class="constructor">TCPV4</span>)(<span class="constructor">KEYS</span>)
+  <span class="keyword">module</span> <span class="constructor">LT</span> = <span class="constructor">Logs_syslog_mirage_tls</span>.<span class="constructor">Tls</span>(<span class="constructor">C</span>)(<span class="constructor">CLOCK</span>)(<span class="constructor">S</span>)(<span class="constructor">KEYS</span>)
 
-&nbsp;&nbsp;<span class="keyword">let</span>&nbsp;start&nbsp;c&nbsp;s&nbsp;_&nbsp;kv&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">let</span>&nbsp;ip&nbsp;=&nbsp;<span class="constructor">Ipaddr</span>.<span class="constructor">V4</span>.of_string_exn&nbsp;<span class="string">"127.0.0.1"</span>&nbsp;<span class="keyword">in</span>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">LT</span>.create&nbsp;c&nbsp;(<span class="constructor">S</span>.tcpv4&nbsp;s)&nbsp;kv&nbsp;~hostname&nbsp;ip&nbsp;()&nbsp;&gt;&gt;=&nbsp;<span class="keyword">function</span>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">Ok</span>&nbsp;r&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Logs</span>.set_reporter&nbsp;r&nbsp;;&nbsp;<span class="constructor">Lwt</span>.return_unit
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">Error</span>&nbsp;e&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Lwt</span>.fail_invalid_arg&nbsp;e
+  <span class="keyword">let</span> start c s _ kv =
+    <span class="keyword">let</span> ip = <span class="constructor">Ipaddr</span>.<span class="constructor">V4</span>.of_string_exn <span class="string">"127.0.0.1"</span> <span class="keyword">in</span>
+    <span class="constructor">LT</span>.create c s kv ~hostname ip () &gt;&gt;= <span class="keyword">function</span>
+      <span class="keywordsign">|</span> <span class="constructor">Ok</span> r <span class="keywordsign">-&gt;</span> <span class="constructor">Logs</span>.set_reporter r ; <span class="constructor">Lwt</span>.return_unit
+      <span class="keywordsign">|</span> <span class="constructor">Error</span> e <span class="keywordsign">-&gt;</span> <span class="constructor">Lwt</span>.fail_invalid_arg e
 <span class="keyword">end</span>
 </code></pre><br>
 </body></html>

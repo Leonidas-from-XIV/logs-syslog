@@ -3,6 +3,7 @@
 <head>
 <link rel="stylesheet" href="style.css" type="text/css">
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="Start" href="index.html">
 <link rel="previous" href="Logs_syslog.html">
 <link rel="next" href="Logs_syslog_lwt.html">
@@ -33,22 +34,25 @@ Logs reporter via syslog using Unix
 </div>
 <hr width="100%">
 
-<pre><span id="VALudp_reporter"><span class="keyword">val</span> udp_reporter</span> : <code class="type">?hostname:string -> Unix.inet_addr -> ?port:int -> unit -> Logs.reporter</code></pre><div class="info ">
-<code class="code">udp_reporter ~hostname remote_ip ~port ()</code> is <code class="code">reporter</code>, which sends log
-    message to <code class="code">remote_ip, port</code> via UDP.  The <code class="code">hostname</code> is part of each syslog
-    message, and defaults to <code class="code"><span class="constructor">Unix</span>.gethostname ()</code>, the <code class="code">port</code> defaults to
-    514.<br>
+<pre><span id="VALudp_reporter"><span class="keyword">val</span> udp_reporter</span> : <code class="type">?hostname:string -><br>       Unix.inet_addr -> ?port:int -> ?truncate:int -> unit -> Logs.reporter</code></pre><div class="info ">
+<code class="code">udp_reporter&nbsp;~hostname&nbsp;remote_ip&nbsp;~port&nbsp;~truncate&nbsp;()</code> is <code class="code">reporter</code>, which
+    sends log message to <code class="code">remote_ip,&nbsp;port</code> via UDP.  Each message is truncated
+    to <code class="code">truncate</code> bytes (defaults to 65535).  The <code class="code">hostname</code> is part of each
+    syslog message, and defaults to <code class="code"><span class="constructor">Unix</span>.gethostname&nbsp;()</code>, the <code class="code">port</code> defaults
+    to 514.<br>
 </div>
 
-<pre><span id="VALtcp_reporter"><span class="keyword">val</span> tcp_reporter</span> : <code class="type">?hostname:string -><br>       Unix.inet_addr -><br>       ?port:int -><br>       ?framing:<a href="Logs_syslog.html#TYPEframing">Logs_syslog.framing</a> -> unit -> (Logs.reporter, string) Result.result</code></pre><div class="info ">
-<code class="code">tcp_reporter ~hostname remote_ip ~port ~framing ()</code> is <code class="code"><span class="constructor">Ok</span> reporter</code> or
-    <code class="code"><span class="constructor">Error</span> msg</code>.  The <code class="code">reporter</code> sends each log message via syslog to
-    <code class="code">remote_ip, port</code> via TCP.  If the initial TCP connection to the <code class="code">remote_ip</code>
-    fails, an <code class="code"><span class="constructor">Error</span> msg</code> is returned instead.  If the TCP connection fails, the
-    log message is reported to standard error, and attempts are made to
-    re-establish the TCP connection.  Each syslog message is terminated with a 0
-    byte.  The <code class="code">hostname</code> defaults to <code class="code"><span class="constructor">Unix</span>.gethostname ()</code>, <code class="code">port</code> to 514,
-    <code class="code">framing</code> to append a 0 byte.<br>
+<pre><span id="VALtcp_reporter"><span class="keyword">val</span> tcp_reporter</span> : <code class="type">?hostname:string -><br>       Unix.inet_addr -><br>       ?port:int -><br>       ?truncate:int -><br>       ?framing:<a href="Logs_syslog.html#TYPEframing">Logs_syslog.framing</a> -><br>       unit -> (Logs.reporter, string) Pervasives.result</code></pre><div class="info ">
+<code class="code">tcp_reporter&nbsp;~hostname&nbsp;remote_ip&nbsp;~port&nbsp;~truncate&nbsp;~framing&nbsp;()</code> is <code class="code"><span class="constructor">Ok</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;reporter</code> or <code class="code"><span class="constructor">Error</span>&nbsp;msg</code>.  The <code class="code">reporter</code> sends each log message via syslog
+    to <code class="code">remote_ip,&nbsp;port</code> via TCP.  If the initial TCP connection to the
+    <code class="code">remote_ip</code> fails, an <code class="code"><span class="constructor">Error</span>&nbsp;msg</code> is returned instead.  If the TCP
+    connection fails, the log message is reported to standard error, and
+    attempts are made to re-establish the TCP connection.  A syslog message is
+    truncated to <code class="code">truncate</code> bytes (by default no truncation happens). Each
+    syslog message is framed according to the given <code class="code">framing</code> (defaults to a
+    single 0 byte).  The <code class="code">hostname</code> defaults to <code class="code"><span class="constructor">Unix</span>.gethostname&nbsp;()</code>, <code class="code">port</code> to
+    514, <code class="code">framing</code> to append a 0 byte.<br>
 </div>
 <br>
 <h1 id="unix_example">Example usage</h1>
@@ -58,14 +62,14 @@ Logs reporter via syslog using Unix
     following snippet:
 <p>
 
-<pre class="codepre"><code class="code"><span class="constructor">Logs</span>.set_reporter&nbsp;(udp_reporter&nbsp;(<span class="constructor">Unix</span>.inet_addr_of_string&nbsp;<span class="string">"127.0.0.1"</span>)&nbsp;())
+<pre class="codepre"><code class="code"><span class="constructor">Logs</span>.set_reporter (udp_reporter (<span class="constructor">Unix</span>.inet_addr_of_string <span class="string">"127.0.0.1"</span>) ())
 </code></pre>
 <p>
 
     To install a reporter using TCP, use the following snippet:
-<pre class="codepre"><code class="code"><span class="keyword">let</span>&nbsp;()&nbsp;=
-&nbsp;&nbsp;<span class="keyword">match</span>&nbsp;tcp_reporter&nbsp;(<span class="constructor">Unix</span>.inet_addr_of_string&nbsp;<span class="string">"127.0.0.1"</span>)&nbsp;()&nbsp;<span class="keyword">with</span>
-&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">Error</span>&nbsp;e&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;print_endline&nbsp;e
-&nbsp;&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">Ok</span>&nbsp;r&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Logs</span>.set_reporter&nbsp;r
+<pre class="codepre"><code class="code"><span class="keyword">let</span> () =
+  <span class="keyword">match</span> tcp_reporter (<span class="constructor">Unix</span>.inet_addr_of_string <span class="string">"127.0.0.1"</span>) () <span class="keyword">with</span>
+  <span class="keywordsign">|</span> <span class="constructor">Error</span> e <span class="keywordsign">-&gt;</span> print_endline e
+  <span class="keywordsign">|</span> <span class="constructor">Ok</span> r <span class="keywordsign">-&gt;</span> <span class="constructor">Logs</span>.set_reporter r
 </code></pre><br>
 </body></html>
